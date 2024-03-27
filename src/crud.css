@@ -1,0 +1,101 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    box-sizing: border-box;
+}
+
+body{
+    background: #eaeaea;
+}
+
+.form_container{
+    background: white;
+    padding: 20px 30px;
+    margin: 0px auto;
+    width: 350px;
+    margin-top: 50px;
+}
+
+.form_container h2{
+    text-align: center;
+    color: #232323;
+    font-size: 16px;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.form_container .box{
+    width: 100%;
+    margin-top: 10px;
+}
+
+.form_container .box input{
+    width: 100%;
+    padding: 10px 0px;
+    border: none;
+    outline: none;
+    border-bottom: 1px solid #868686;
+}
+
+.form_container button{
+    margin-left: 20px;
+    padding: 10px 30px;
+    border: none;
+    outline: none;
+    background: #2196f3;
+    color: white;
+    margin-top: 20px;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.database{
+    padding: 20px 40px;
+    width: 100%;
+}
+
+.database h2{
+    color: #232323;
+    font-size: 18px;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.database .container{
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 100%;
+}
+
+.database .container .box{
+    padding: 10px 20px;
+    margin-top: 20px;
+    margin-left: 15px;
+    background: white;
+    border-radius: 5px;
+}
+
+.database .container .box h3{
+    margin-top: 5px;
+    font-size: 16px;
+    color: #232323;
+}
+
+.database .container .box button{
+    margin-top: 20px;
+    padding: 10px 20px;
+    background: #2196f3;
+    color: white;
+    outline: none;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.delete{
+    background-color: rgb(224, 17, 17) !important;
+}
