@@ -18,7 +18,7 @@ function App() {
         <Router>
             <Routes>
                 <Route path="/" element={<LoginForm />} />
-                <Route path="/crud" element={<Crud />} />
+                <Route path="/home" element={<Crud />} />
             </Routes>
         </Router>
     );
