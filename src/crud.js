@@ -3,6 +3,7 @@ import { db } from './firebase'
 import './crud.css'
 import {doc, addDoc, collection, updateDoc, deleteDoc, getDocs} from 'firebase/firestore'
 import { useState, useEffect } from 'react'
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 
 function Crud() {
 
@@ -16,13 +17,23 @@ function Crud() {
     //Criando Database
     const dbref = collection(db, "crud")
 
+    // Firebase Authentication
+    const auth = getAuth();
+
     //Iniciando data
     const add = async () => {
-        const adddata = await addDoc(dbref, {Name: name, Email: email, Bio: bio, Password: password})
-        if(adddata){
-            alert('Usuario adicionado com sucesso')
-            window.location.reload()
-        } else {
+        try {
+            // Adiciona o usuário ao Firestore
+            const adddata = await addDoc(dbref, {Name: name, Email: email, Bio: bio, Password: password})
+            if(adddata){
+                // Adiciona o usuário ao Firebase Authentication
+                await createUserWithEmailAndPassword(auth, email, password);
+                alert('Usuario adicionado com sucesso')
+                window.location.reload()
+            } else {
+                alert('Algum erro ocorreu')
+            }
+        } catch (error) {
             alert('Algum erro ocorreu')
         }
     }
