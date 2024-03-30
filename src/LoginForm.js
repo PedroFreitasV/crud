@@ -11,8 +11,7 @@ function LoginForm() {
         const auth = getAuth();
         try {
             await signInWithEmailAndPassword(auth, email, password);
-            // Redirecionar para o CRUD após o login bem-sucedido
-            window.location.href = '/crud'; // Substitua '/crud' pela rota do seu CRUD
+            window.location.href = '/crud';
         } catch (error) {
             alert('Falha ao fazer login. Verifique suas credenciais.');
         }
