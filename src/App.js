@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import LoginForm from './LoginForm';
-import Crud from './crud';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import LoginForm from './LoginForm';
+import Crud from './crud'
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
