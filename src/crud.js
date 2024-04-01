@@ -24,6 +24,11 @@ function Crud() {
     //Iniciando data
     const add = async () => {
         try {
+            if (password.length < 8) {
+                alert('A senha deve ter no mínimo 8 caracteres');
+                return;
+            }
+    
             // Adiciona o usuário ao Firestore
             const adddata = await addDoc(dbref, { Name: name, Email: email, Bio: bio, Password: password })
             if (adddata) {
@@ -66,8 +71,13 @@ function Crud() {
     const update = async () => {
         const updateref = doc(dbref, id)
         try {
+            if (password.length < 8) {
+                alert('A senha deve ter no mínimo 8 caracteres');
+                return;
+            }
+    
             const updatedata = await updateDoc(updateref, { Name: name, Email: email, Bio: bio, Password: password })
-
+    
             // Verifica se há um usuário autenticado
             const user = auth.currentUser;
             if (user && user.email) {
@@ -77,7 +87,7 @@ function Crud() {
             } else {
                 throw new Error('Nenhum usuário autenticado');
             }
-
+    
             alert("Edição bem sucedida")
             window.location.reload()
         } catch (error) {
