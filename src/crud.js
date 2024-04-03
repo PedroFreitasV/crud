@@ -1,7 +1,7 @@
 import React from 'react'
 import { db } from './firebase'
 import './crud.css'
-import { doc, addDoc, collection, updateDoc, deleteDoc, getDocs } from 'firebase/firestore'
+import { doc, addDoc, collection, updateDoc, deleteDoc, getDocs, getDoc  } from 'firebase/firestore'
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom';
 import { getAuth, createUserWithEmailAndPassword, deleteUser, updateEmail, updatePassword } from 'firebase/auth';
@@ -22,20 +22,23 @@ function Crud() {
     const auth = getAuth();
 
     //Iniciando data
-    const add = async () => {
+    const add = async (e) => {
+        e.preventDefault();
         try {
             if (password.length < 8) {
                 alert('A senha deve ter no mínimo 8 caracteres');
                 return;
             }
     
-            // Adiciona o usuário ao Firestore
             const adddata = await addDoc(dbref, { Name: name, Email: email, Bio: bio, Password: password })
             if (adddata) {
-                // Adiciona o usuário ao Firebase Authentication
                 await createUserWithEmailAndPassword(auth, email, password);
                 alert('Usuario adicionado com sucesso')
-                window.location.reload()
+                fetch(); // Atualiza a lista de usuários
+                setName('');
+                setEmail('');
+                setBio('');
+                setPassword('');
             } else {
                 alert('Algum erro ocorreu')
             }
@@ -43,6 +46,7 @@ function Crud() {
             alert('Algum erro ocorreu')
         }
     }
+    
 
     //Fetching
     const fetch = async () => {
@@ -72,11 +76,9 @@ function Crud() {
         const updateref = doc(dbref, id)
         try {
             if (password.length < 8) {
-                alert('A senha deve ter no mínimo 8 caracteres');
+                console.log('A senha deve ter no mínimo 8 caracteres');
                 return;
             }
-    
-            const updatedata = await updateDoc(updateref, { Name: name, Email: email, Bio: bio, Password: password })
     
             // Verifica se há um usuário autenticado
             const user = auth.currentUser;
@@ -84,38 +86,50 @@ function Crud() {
                 // Atualiza no Firebase Authentication
                 await updateEmail(user, email);
                 await updatePassword(user, password);
+    
+                // Atualiza no Firestore
+                const updatedata = await updateDoc(updateref, { Name: name, Email: email, Bio: bio, Password: password })
+    
+                // Atualiza o estado local com os novos dados
+                setFetchData(prevData => prevData.map(item => item.id === id ? { id: item.id, Name: name, Email: email, Bio: bio, Password: password } : item));
             } else {
                 throw new Error('Nenhum usuário autenticado');
             }
-    
-            alert("Edição bem sucedida")
-            window.location.reload()
         } catch (error) {
             alert("Erro na edição: " + error)
         }
     }
+    
+    
 
     //Delete
     const del = async (id) => {
         const delref = doc(dbref, id)
         try {
             await deleteDoc(delref)
-
-            // Verifica se há um usuário autenticado
-            const user = auth.currentUser;
-            if (user) {
-                // Exclui usuário do Firebase Authentication
-                await deleteUser(user);
+    
+            // Verifica se o documento foi excluído com sucesso
+            const snapshot = await getDoc(delref)
+            if (!snapshot.exists()) {
+                const user = auth.currentUser;
+                if (user) {
+                    // Exclui o usuário do Firebase Authentication
+                    await deleteUser(user);
+                } else {
+                    throw new Error('Nenhum usuário autenticado');
+                }
+    
+                alert("Usuario Excluido")
+                fetch();
             } else {
-                throw new Error('Nenhum usuário autenticado');
+                throw new Error('Erro ao excluir usuário no Firestore');
             }
-
-            alert("Usuario Excluido")
-            window.location.reload()
         } catch (error) {
             alert(error)
         }
     }
+    
+    
 
     return (
         <>
